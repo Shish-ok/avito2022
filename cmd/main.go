@@ -1,6 +1,7 @@
 package main
 
 import (
+	"avito2022/internal/app/api"
 	"avito2022/internal/app/config"
 	"context"
 	"github.com/gin-gonic/gin"
@@ -14,5 +15,6 @@ func main() {
 			config.NewConfig(),
 			gin.Default(),
 		),
+		fx.Invoke(api.StartHook),
 	).Run()
 }
