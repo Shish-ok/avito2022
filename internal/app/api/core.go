@@ -61,5 +61,9 @@ func StartHook(lifecycle fx.Lifecycle, api *Api) {
 }
 
 func (api *Api) registerRoutes() {
-	//base := api.router.Group(BasePath)
+	base := api.router.Group(BasePath)
+
+	balance := base.Group("/balance")
+	balance.POST("/up_balance/:user_id", api.UpBalance)
+	balance.GET("/get_balance/:user_id}", api.GetBalance)
 }
