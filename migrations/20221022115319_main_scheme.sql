@@ -2,7 +2,6 @@
 -- +goose StatementBegin
 CREATE TABLE IF NOT EXISTS user_balance (
     user_id BIGINT NOT NULL UNIQUE,
-    user_name TEXT NOT NULL,
     balance NUMERIC(6, 2) NOT NULL
 );
 
