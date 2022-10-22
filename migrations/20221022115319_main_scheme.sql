@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXIST balance_holder (
     user_id BIGINT NOT NULL,
     operation_time TIMESTAMP,
     operation_type TEXT NOT NULL,
-    cost DOUBLE NOT NULL
+    cost NUMERIC(6, 2) NOT NULL
 );
 
 CREATE TABLE IF NOT EXIST operation_history (
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXIST operation_history (
   user_id BIGINT NOT NULL,
   operation_time TIMESTAMP,
   operation_type TEXT NOT NULL,
-  cost DOUBLE NOT NULL
+  cost NUMERIC(6, 2) NOT NULL
 );
 -- +goose StatementEnd
 
