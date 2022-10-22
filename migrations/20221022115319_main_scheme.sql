@@ -1,12 +1,12 @@
 -- +goose Up
 -- +goose StatementBegin
-CREATE TABLE IF NOT EXIST user_balance (
+CREATE TABLE IF NOT EXISTS user_balance (
     user_id BIGINT NOT NULL UNIQUE,
     user_name TEXT NOT NULL,
-    balance DOUBLE NOT NULL
+    balance NUMERIC(6, 2) NOT NULL
 );
 
-CREATE TABLE IF NOT EXIST balance_holder (
+CREATE TABLE IF NOT EXISTS balance_holder (
     operation_id BIGINT NOT NULL UNIQUE,
     user_id BIGINT NOT NULL,
     operation_time TIMESTAMP,
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXIST balance_holder (
     cost NUMERIC(6, 2) NOT NULL
 );
 
-CREATE TABLE IF NOT EXIST operation_history (
+CREATE TABLE IF NOT EXISTS operation_history (
   operation_id BIGINT NOT NULL UNIQUE,
   user_id BIGINT NOT NULL,
   operation_time TIMESTAMP,
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXIST operation_history (
 
 -- +goose Down
 -- +goose StatementBegin
-DROP TABLE IF EXIST user_balance;
-DROP TABLE IF EXIST balance_holder;
-DROP TABLE IF EXIST operation_history;
+DROP TABLE IF EXISTS user_balance;
+DROP TABLE IF EXISTS balance_holder;
+DROP TABLE IF EXISTS operation_history;
 -- +goose StatementEnd
