@@ -1,7 +1,9 @@
 package api
 
 import (
+	"avito2022/docs"
 	"avito2022/internal/app/config"
+	"avito2022/internal/app/service/balance"
 	"context"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -9,15 +11,20 @@ import (
 	"go.uber.org/fx"
 )
 
-// @BasePath /api/v1/
-const BasePath = "/api/v1/"
+const (
+	Title    = "Balance handler API"
+	BasePath = "/api/v1/"
+)
 
 type Api struct {
-	router *gin.Engine
+	router  *gin.Engine
+	balance *balance.Service
 }
 
 func (api *Api) Run() {
 	cfg := config.Load()
+	docs.SwaggerInfo.BasePath = BasePath
+	docs.SwaggerInfo.Title = Title
 
 	api.router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, ginSwagger.DefaultModelsExpandDepth(-1)))
 
@@ -27,9 +34,11 @@ func (api *Api) Run() {
 
 func NewApi(
 	router *gin.Engine,
+	balance *balance.Service,
 ) *Api {
 	svc := &Api{
-		router: router,
+		router:  router,
+		balance: balance,
 	}
 	svc.registerRoutes()
 	return svc
@@ -38,6 +47,7 @@ func NewApi(
 func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, accept, origin, X-Requested-With")
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT")
 
@@ -65,5 +75,5 @@ func (api *Api) registerRoutes() {
 
 	balance := base.Group("/balance")
 	balance.POST("/up_balance/:user_id", api.UpBalance)
-	balance.GET("/get_balance/:user_id}", api.GetBalance)
+	balance.GET("/get_balance/:user_id", api.GetBalance)
 }

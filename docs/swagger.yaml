@@ -1,0 +1,67 @@
+definitions:
+  avito2022_internal_app_api.Balance:
+    properties:
+      balance:
+        type: number
+    type: object
+  avito2022_internal_app_api.BalanceReplenishment:
+    properties:
+      replenishment:
+        type: number
+    type: object
+  internal_app_api.Balance:
+    properties:
+      balance:
+        type: number
+    type: object
+  internal_app_api.BalanceReplenishment:
+    properties:
+      replenishment:
+        type: number
+    type: object
+info:
+  contact: {}
+paths:
+  /balance/get_balance/{user_id}:
+    get:
+      description: Возвращает баланс пользователя по его id
+      parameters:
+      - description: id пользователя
+        in: path
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_app_api.Balance'
+      summary: Получение баланса пользователя
+      tags:
+      - balance
+  /balance/up_balance/{user_id}:
+    post:
+      consumes:
+      - application/json
+      description: Пополняет баланс пользователя или создаёт его при первом пополнении
+      parameters:
+      - description: id пользователя
+        in: path
+        name: user_id
+        required: true
+        type: string
+      - description: Входные параметры
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/internal_app_api.BalanceReplenishment'
+      responses:
+        "200":
+          description: OK
+      summary: Пополнение или инициализация баланса
+      tags:
+      - balance
+swagger: "2.0"
