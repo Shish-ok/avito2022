@@ -6,7 +6,8 @@ CREATE TABLE IF NOT EXISTS user_balance (
 );
 
 CREATE TABLE IF NOT EXISTS balance_holder (
-    operation_id BIGINT NOT NULL UNIQUE,
+    order_id BIGINT NOT NULL UNIQUE,
+    operation_id BIGINT NOT NULL,
     user_id BIGINT NOT NULL,
     operation_time TIMESTAMP,
     operation_type TEXT NOT NULL,
@@ -14,7 +15,8 @@ CREATE TABLE IF NOT EXISTS balance_holder (
 );
 
 CREATE TABLE IF NOT EXISTS operation_history (
-  operation_id BIGINT NOT NULL UNIQUE,
+  order_id BIGINT NOT NULL UNIQUE,
+  operation_id BIGINT NOT NULL,
   user_id BIGINT NOT NULL,
   operation_time TIMESTAMP,
   operation_type TEXT NOT NULL,
