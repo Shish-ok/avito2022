@@ -7,10 +7,10 @@ CREATE TABLE IF NOT EXISTS user_balance (
 
 CREATE TABLE IF NOT EXISTS balance_holder (
     order_id BIGINT NOT NULL UNIQUE,
-    operation_id BIGINT NOT NULL,
+    service_id BIGINT NOT NULL,
     user_id BIGINT NOT NULL,
     operation_time TIMESTAMP,
-    operation_type TEXT NOT NULL,
+    service_name TEXT NOT NULL,
     cost NUMERIC(6, 2) NOT NULL
 );
 
