@@ -4,6 +4,7 @@ import (
 	"avito2022/docs"
 	"avito2022/internal/app/config"
 	"avito2022/internal/app/service/balance"
+	"avito2022/internal/app/service/user_transaction"
 	"context"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -17,8 +18,9 @@ const (
 )
 
 type Api struct {
-	router  *gin.Engine
-	balance *balance.Service
+	router          *gin.Engine
+	balance         *balance.Service
+	userTransaction *user_transaction.Service
 }
 
 func (api *Api) Run() {
@@ -35,10 +37,12 @@ func (api *Api) Run() {
 func NewApi(
 	router *gin.Engine,
 	balance *balance.Service,
+	userTransaction *user_transaction.Service,
 ) *Api {
 	svc := &Api{
-		router:  router,
-		balance: balance,
+		router:          router,
+		balance:         balance,
+		userTransaction: userTransaction,
 	}
 	svc.registerRoutes()
 	return svc
@@ -74,6 +78,6 @@ func (api *Api) registerRoutes() {
 	base := api.router.Group(BasePath)
 
 	balance := base.Group("/balance")
-	balance.POST("/up_balance/:user_id", api.UpBalance)
-	balance.GET("/get_balance/:user_id", api.GetBalance)
+	balance.POST("/up_balance/", api.UpBalance)
+	balance.GET("/get_balance/", api.GetBalance)
 }

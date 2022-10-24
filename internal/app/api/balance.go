@@ -12,6 +12,7 @@ type UserID struct {
 }
 
 type BalanceReplenishment struct {
+	UserID        uint64  `json:"user_id"`
 	Replenishment float32 `json:"replenishment"`
 }
 
@@ -25,24 +26,18 @@ type Balance struct {
 // @Description Пополняет баланс пользователя или создаёт его при первом пополнении
 // @Tags balance
 // @Accept json
-// @Param user_id path string true "id пользователя"
 // @Param data body BalanceReplenishment true "Входные параметры"
 // @Success 200
-// @Router /balance/up_balance/{user_id} [post]
+// @Router /balance/up_balance [post]
 func (api *Api) UpBalance(ctx *gin.Context) {
-	var userID UserID
-	if err := ctx.ShouldBindUri(&userID); err != nil {
+	var replenishment BalanceReplenishment
+
+	if err := ctx.BindJSON(&replenishment); err != nil {
 		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
-	var balance Balance
-	if err := ctx.BindJSON(&balance); err != nil {
-		ctx.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
-
-	err := api.balance.UpsetUserBalance(ctx, models.UserBalance{UserID: userID.ID, Balance: balance.Balance})
+	err := api.balance.UpsetUserBalance(ctx, models.UserBalance{UserID: replenishment.UserID, Balance: replenishment.Replenishment})
 	if err == balance_service.ErrInvalidBalance {
 		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
@@ -52,6 +47,8 @@ func (api *Api) UpBalance(ctx *gin.Context) {
 		return
 	}
 
+	api.userTransaction.UpBalanceTransaction(ctx, replenishment.UserID, replenishment.Replenishment)
+
 	ctx.AbortWithStatus(http.StatusOK)
 }
 
@@ -60,13 +57,15 @@ func (api *Api) UpBalance(ctx *gin.Context) {
 // @Schemes
 // @Description Возвращает баланс пользователя по его id
 // @Tags balance
+// @Accept json
+// @Param data body UserID true "Входные параметры"
 // @Produce json
 // @Success 200 {object} Balance
-// @Param user_id  path string  true  "id пользователя"
-// @Router /balance/get_balance/{user_id} [get]
+// @Router /balance/get_balance [get]
 func (api *Api) GetBalance(ctx *gin.Context) {
 	var userID UserID
-	if err := ctx.ShouldBindUri(&userID); err != nil {
+
+	if err := ctx.BindJSON(&userID); err != nil {
 		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 	}

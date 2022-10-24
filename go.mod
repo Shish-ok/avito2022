@@ -5,10 +5,12 @@ go 1.19
 require (
 	github.com/Masterminds/squirrel v1.5.3
 	github.com/gin-gonic/gin v1.8.1
+	github.com/google/uuid v1.3.0
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/lib/pq v1.2.0
 	github.com/swaggo/files v0.0.0-20220728132757-551d4a08d97a
 	github.com/swaggo/gin-swagger v1.5.3
+	github.com/swaggo/swag v1.8.1
 	go.uber.org/fx v1.18.2
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -36,7 +38,6 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.1 // indirect
-	github.com/swaggo/swag v1.8.1 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
 	go.uber.org/atomic v1.6.0 // indirect
 	go.uber.org/dig v1.15.0 // indirect

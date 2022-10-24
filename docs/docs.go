@@ -16,9 +16,12 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/balance/get_balance/{user_id}": {
+        "/balance/get_balance": {
             "get": {
                 "description": "Возвращает баланс пользователя по его id",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -28,24 +31,54 @@ const docTemplate = `{
                 "summary": "Получение баланса пользователя",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "id пользователя",
-                        "name": "user_id",
-                        "in": "path",
-                        "required": true
+                        "description": "Входные параметры",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/avito2022_internal_app_api.UserID"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.Balance"
+                            "$ref": "#/definitions/avito2022_internal_app_api.Balance"
                         }
                     }
                 }
             }
         },
-        "/balance/up_balance/{user_id}": {
+        "/balance/reserve_money": {
+            "post": {
+                "description": "Резервирование средств с основного баланса на отдельном счете",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sales"
+                ],
+                "summary": "Резервирование средств",
+                "parameters": [
+                    {
+                        "description": "Входные параметры",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_app_api.Reserve"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/balance/up_balance": {
             "post": {
                 "description": "Пополняет баланс пользователя или создаёт его при первом пополнении",
                 "consumes": [
@@ -57,19 +90,12 @@ const docTemplate = `{
                 "summary": "Пополнение или инициализация баланса",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "id пользователя",
-                        "name": "user_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
                         "description": "Входные параметры",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.BalanceReplenishment"
+                            "$ref": "#/definitions/avito2022_internal_app_api.BalanceReplenishment"
                         }
                     }
                 ],
@@ -95,6 +121,37 @@ const docTemplate = `{
             "properties": {
                 "replenishment": {
                     "type": "number"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "avito2022_internal_app_api.Reserve": {
+            "type": "object",
+            "properties": {
+                "cost": {
+                    "type": "number"
+                },
+                "order_id": {
+                    "type": "integer"
+                },
+                "service_id": {
+                    "type": "integer"
+                },
+                "service_name": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "avito2022_internal_app_api.UserID": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
                 }
             }
         },
@@ -111,6 +168,37 @@ const docTemplate = `{
             "properties": {
                 "replenishment": {
                     "type": "number"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_app_api.Reserve": {
+            "type": "object",
+            "properties": {
+                "cost": {
+                    "type": "number"
+                },
+                "order_id": {
+                    "type": "integer"
+                },
+                "service_id": {
+                    "type": "integer"
+                },
+                "service_name": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_app_api.UserID": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
                 }
             }
         }

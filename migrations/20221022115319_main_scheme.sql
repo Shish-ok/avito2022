@@ -19,12 +19,12 @@ CREATE TABLE IF NOT EXISTS service_history (
     service_id BIGINT NOT NULL,
     user_id BIGINT NOT NULL,
     operation_time TIMESTAMP,
-    operation_type TEXT NOT NULL,
+    service_name TEXT NOT NULL,
     cost NUMERIC(6, 2) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS transaction_history (
-    tranzaction_id BIGINT NOT NULL UNIQUE,
+    transaction_id BIGINT NOT NULL UNIQUE,
     user_id BIGINT NOT NULL,
     operation_time TIMESTAMP,
     description TEXT NOT NULL,
