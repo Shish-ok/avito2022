@@ -1,11 +1,9 @@
 package models
 
-import "time"
-
 type HolderOperation struct {
-	OperationID   uint64    `db:"operation_id" json:"operation_id"`
-	UserID        uint64    `db:"user_id" json:"user_id"`
-	OperationTime time.Time `db:"operation_time" json:"operation_time"`
-	OperationType string    `db:"operation_type" json:"operation_type"`
-	Cost          float32   `db:"cost" json:"cost"`
+	OrderID     uint64  `db:"order_id" json:"order_id"`
+	ServiceID   uint64  `db:"service_id" json:"service_id"`
+	UserID      uint64  `db:"user_id" json:"user_id"`
+	ServiceName string  `db:"service_name" json:"service_name"`
+	Cost        float32 `db:"cost" json:"cost"`
 }

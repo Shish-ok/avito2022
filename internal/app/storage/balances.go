@@ -51,3 +51,24 @@ func (p *PostgresStorage) GetUserBalance(ctx context.Context, userID uint64) (fl
 	err = p.db.GetContext(ctx, &balance, query, args...)
 	return balance, err
 }
+
+func (p *PostgresStorage) RemoveMoney(ctx context.Context, userID uint64, cost float32) error {
+
+	query, args, err := sq.
+		Update(BalanceTable).
+		Set(Balance, sq.Expr(fmt.Sprintf("%s-%f", Balance, cost))).
+		Where(sq.Eq{UserID: userID}).
+		PlaceholderFormat(sq.Dollar).
+		ToSql()
+	//Update(BalanceTable).
+	//Suffix(fmt.Sprintf("SET %s = %s.%s - %f WHERE %s = %d", Balance, BalanceTable, Balance, cost, UserID, userID)).
+	//PlaceholderFormat(sq.Dollar).
+	//ToSql()
+
+	if err != nil {
+		return err
+	}
+
+	_, err = p.db.ExecContext(ctx, query, args...)
+	return err
+}

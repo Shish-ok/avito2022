@@ -63,7 +63,7 @@ info:
   contact: {}
 paths:
   /balance/get_balance:
-    get:
+    post:
       consumes:
       - application/json
       description: Возвращает баланс пользователя по его id
@@ -73,35 +73,17 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/avito2022_internal_app_api.UserID'
+          $ref: '#/definitions/internal_app_api.UserID'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/avito2022_internal_app_api.Balance'
+            $ref: '#/definitions/internal_app_api.Balance'
       summary: Получение баланса пользователя
       tags:
       - balance
-  /balance/reserve_money:
-    post:
-      consumes:
-      - application/json
-      description: Резервирование средств с основного баланса на отдельном счете
-      parameters:
-      - description: Входные параметры
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/internal_app_api.Reserve'
-      responses:
-        "200":
-          description: OK
-      summary: Резервирование средств
-      tags:
-      - sales
   /balance/up_balance:
     post:
       consumes:
@@ -113,11 +95,29 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/avito2022_internal_app_api.BalanceReplenishment'
+          $ref: '#/definitions/internal_app_api.BalanceReplenishment'
       responses:
         "200":
           description: OK
       summary: Пополнение или инициализация баланса
       tags:
       - balance
+  /sales/reserve_money:
+    post:
+      consumes:
+      - application/json
+      description: Резервирование средств с основного баланса на отдельном счете
+      parameters:
+      - description: Входные параметры
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/avito2022_internal_app_api.Reserve'
+      responses:
+        "200":
+          description: OK
+      summary: Резервирование средств
+      tags:
+      - sales
 swagger: "2.0"

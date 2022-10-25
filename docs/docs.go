@@ -17,7 +17,7 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/balance/get_balance": {
-            "get": {
+            "post": {
                 "description": "Возвращает баланс пользователя по его id",
                 "consumes": [
                     "application/json"
@@ -36,7 +36,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/avito2022_internal_app_api.UserID"
+                            "$ref": "#/definitions/internal_app_api.UserID"
                         }
                     }
                 ],
@@ -44,36 +44,8 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/avito2022_internal_app_api.Balance"
+                            "$ref": "#/definitions/internal_app_api.Balance"
                         }
-                    }
-                }
-            }
-        },
-        "/balance/reserve_money": {
-            "post": {
-                "description": "Резервирование средств с основного баланса на отдельном счете",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "sales"
-                ],
-                "summary": "Резервирование средств",
-                "parameters": [
-                    {
-                        "description": "Входные параметры",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/internal_app_api.Reserve"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
                     }
                 }
             }
@@ -95,7 +67,35 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/avito2022_internal_app_api.BalanceReplenishment"
+                            "$ref": "#/definitions/internal_app_api.BalanceReplenishment"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/sales/reserve_money": {
+            "post": {
+                "description": "Резервирование средств с основного баланса на отдельном счете",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sales"
+                ],
+                "summary": "Резервирование средств",
+                "parameters": [
+                    {
+                        "description": "Входные параметры",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/avito2022_internal_app_api.Reserve"
                         }
                     }
                 ],

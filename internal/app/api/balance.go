@@ -61,7 +61,7 @@ func (api *Api) UpBalance(ctx *gin.Context) {
 // @Param data body UserID true "Входные параметры"
 // @Produce json
 // @Success 200 {object} Balance
-// @Router /balance/get_balance [get]
+// @Router /balance/get_balance [post]
 func (api *Api) GetBalance(ctx *gin.Context) {
 	var userID UserID
 

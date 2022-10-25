@@ -4,6 +4,7 @@ import (
 	"avito2022/internal/app/api"
 	"avito2022/internal/app/config"
 	"avito2022/internal/app/service/balance"
+	"avito2022/internal/app/service/balance_holder"
 	"avito2022/internal/app/service/user_transaction"
 	"avito2022/internal/app/storage"
 	"context"
@@ -16,6 +17,10 @@ func balanceStorage(storage *storage.PostgresStorage) balance.Storage {
 }
 
 func userTransactionStorage(storage *storage.PostgresStorage) user_transaction.Storage {
+	return storage
+}
+
+func balanceHolderStorage(storage *storage.PostgresStorage) balance_holder.Storage {
 	return storage
 }
 
@@ -32,6 +37,8 @@ func main() {
 			balance.NewService,
 			userTransactionStorage,
 			user_transaction.NewService,
+			balanceHolderStorage,
+			balance_holder.NewService,
 		),
 		fx.Invoke(api.StartHook),
 	).Run()
