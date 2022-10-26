@@ -36,7 +36,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.UserID"
+                            "$ref": "#/definitions/avito2022_internal_app_api.UserID"
                         }
                     }
                 ],
@@ -44,7 +44,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.Balance"
+                            "$ref": "#/definitions/avito2022_internal_app_api.Balance"
                         }
                     }
                 }
@@ -67,7 +67,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.BalanceReplenishment"
+                            "$ref": "#/definitions/avito2022_internal_app_api.BalanceReplenishment"
                         }
                     }
                 ],
@@ -95,7 +95,63 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/avito2022_internal_app_api.Reserve"
+                            "$ref": "#/definitions/internal_app_api.Reserve"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/sales/return_money": {
+            "post": {
+                "description": "Разрезервирование средств и возвращение их на баланс пользователя при отмене операции",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sales"
+                ],
+                "summary": "Возвращение средств",
+                "parameters": [
+                    {
+                        "description": "Входные параметры",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_app_api.Refund"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/sales/revenue_confirmation": {
+            "post": {
+                "description": "Списывает из резерва деньги, добавляет данные в отчет для бухгалтерии",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sales"
+                ],
+                "summary": "Метод признания выручки",
+                "parameters": [
+                    {
+                        "description": "Входные параметры",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_app_api.Confirmation"
                         }
                     }
                 ],
@@ -123,6 +179,34 @@ const docTemplate = `{
                     "type": "number"
                 },
                 "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "avito2022_internal_app_api.Confirmation": {
+            "type": "object",
+            "properties": {
+                "cost": {
+                    "type": "number"
+                },
+                "order_id": {
+                    "type": "integer"
+                },
+                "service_id": {
+                    "type": "integer"
+                },
+                "service_name": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "avito2022_internal_app_api.Refund": {
+            "type": "object",
+            "properties": {
+                "order_id": {
                     "type": "integer"
                 }
             }
@@ -170,6 +254,34 @@ const docTemplate = `{
                     "type": "number"
                 },
                 "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_app_api.Confirmation": {
+            "type": "object",
+            "properties": {
+                "cost": {
+                    "type": "number"
+                },
+                "order_id": {
+                    "type": "integer"
+                },
+                "service_id": {
+                    "type": "integer"
+                },
+                "service_name": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_app_api.Refund": {
+            "type": "object",
+            "properties": {
+                "order_id": {
                     "type": "integer"
                 }
             }

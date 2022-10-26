@@ -30,3 +30,10 @@ func (s *Service) UpBalanceTransaction(ctx context.Context, userID uint64, cost 
 		log.Print(err)
 	}
 }
+
+func (s *Service) MakeServiceTransaction(ctx context.Context, userID uint64, serviceName string, cost float32) {
+	err := s.storage.MakeUserTransaction(ctx, models.NewUserTransaction(userID, serviceName, cost))
+	if err != nil {
+		log.Print(err)
+	}
+}

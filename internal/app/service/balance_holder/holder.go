@@ -13,6 +13,8 @@ var (
 
 type Storage interface {
 	ReserveMoney(context.Context, models.HolderOperation) error
+	RevenueConfirmation(context.Context, uint64) error
+	ReturnMoney(context.Context, uint64) error
 }
 
 type Service struct {
@@ -31,4 +33,12 @@ func (s *Service) ReserveMoney(ctx context.Context, operation models.HolderOpera
 	}
 
 	return s.storage.ReserveMoney(ctx, operation)
+}
+
+func (s *Service) RevenueConfirmation(ctx context.Context, orderID uint64) error {
+	return s.storage.RevenueConfirmation(ctx, orderID)
+}
+
+func (s *Service) ReturnMoney(ctx context.Context, orderID uint64) error {
+	return s.storage.ReturnMoney(ctx, orderID)
 }

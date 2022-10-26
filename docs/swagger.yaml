@@ -11,6 +11,24 @@ definitions:
       user_id:
         type: integer
     type: object
+  avito2022_internal_app_api.Confirmation:
+    properties:
+      cost:
+        type: number
+      order_id:
+        type: integer
+      service_id:
+        type: integer
+      service_name:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  avito2022_internal_app_api.Refund:
+    properties:
+      order_id:
+        type: integer
+    type: object
   avito2022_internal_app_api.Reserve:
     properties:
       cost:
@@ -39,6 +57,24 @@ definitions:
       replenishment:
         type: number
       user_id:
+        type: integer
+    type: object
+  internal_app_api.Confirmation:
+    properties:
+      cost:
+        type: number
+      order_id:
+        type: integer
+      service_id:
+        type: integer
+      service_name:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  internal_app_api.Refund:
+    properties:
+      order_id:
         type: integer
     type: object
   internal_app_api.Reserve:
@@ -73,14 +109,14 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/internal_app_api.UserID'
+          $ref: '#/definitions/avito2022_internal_app_api.UserID'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/internal_app_api.Balance'
+            $ref: '#/definitions/avito2022_internal_app_api.Balance'
       summary: Получение баланса пользователя
       tags:
       - balance
@@ -95,7 +131,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/internal_app_api.BalanceReplenishment'
+          $ref: '#/definitions/avito2022_internal_app_api.BalanceReplenishment'
       responses:
         "200":
           description: OK
@@ -113,11 +149,48 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/avito2022_internal_app_api.Reserve'
+          $ref: '#/definitions/internal_app_api.Reserve'
       responses:
         "200":
           description: OK
       summary: Резервирование средств
+      tags:
+      - sales
+  /sales/return_money:
+    post:
+      consumes:
+      - application/json
+      description: Разрезервирование средств и возвращение их на баланс пользователя
+        при отмене операции
+      parameters:
+      - description: Входные параметры
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/internal_app_api.Refund'
+      responses:
+        "200":
+          description: OK
+      summary: Возвращение средств
+      tags:
+      - sales
+  /sales/revenue_confirmation:
+    post:
+      consumes:
+      - application/json
+      description: Списывает из резерва деньги, добавляет данные в отчет для бухгалтерии
+      parameters:
+      - description: Входные параметры
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/internal_app_api.Confirmation'
+      responses:
+        "200":
+          description: OK
+      summary: Метод признания выручки
       tags:
       - sales
 swagger: "2.0"

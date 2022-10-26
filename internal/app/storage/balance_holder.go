@@ -60,3 +60,80 @@ func (p *PostgresStorage) ReserveMoney(ctx context.Context, operation models.Hol
 
 	return tx.Commit()
 }
+
+func (p *PostgresStorage) GetHolderOperationByOrderID(ctx context.Context, orderID uint64) (models.HolderOperation, error) {
+	var operation models.HolderOperation
+
+	query, args, err := sq.
+		Select(OrderID, ServiceID, UserID, ServiceName, Cost).
+		From(BalanceHolderTable).
+		Where(sq.Eq{OrderID: orderID}).
+		PlaceholderFormat(sq.Dollar).
+		ToSql()
+
+	if err != nil {
+		return operation, err
+	}
+
+	err = p.db.GetContext(ctx, &operation, query, args...)
+
+	return operation, err
+}
+
+func (p *PostgresStorage) DelHolderOperationByOrderID(ctx context.Context, orderID uint64) error {
+
+	query, args, err := sq.
+		Delete(BalanceHolderTable).
+		Where(sq.Eq{OrderID: orderID}).
+		PlaceholderFormat(sq.Dollar).
+		ToSql()
+
+	if err != nil {
+		return err
+	}
+
+	_, err = p.db.Exec(query, args...)
+
+	return err
+}
+
+func (p *PostgresStorage) RevenueConfirmation(ctx context.Context, orderID uint64) error {
+	tx, err := p.db.Begin()
+
+	if err != nil {
+		return err
+	}
+
+	defer tx.Rollback()
+
+	if err := p.DelHolderOperationByOrderID(ctx, orderID); err != nil {
+		return err
+	}
+
+	return tx.Commit()
+}
+
+func (p *PostgresStorage) ReturnMoney(ctx context.Context, orderID uint64) error {
+	tx, err := p.db.Begin()
+
+	if err != nil {
+		return err
+	}
+
+	defer tx.Rollback()
+
+	operation, err := p.GetHolderOperationByOrderID(ctx, orderID)
+	if err != nil {
+		return err
+	}
+
+	if err := p.DelHolderOperationByOrderID(ctx, orderID); err != nil {
+		return err
+	}
+
+	if err := p.UpsetUserBalance(ctx, models.UserBalance{UserID: operation.UserID, Balance: operation.Cost}); err != nil {
+		return err
+	}
+
+	return tx.Commit()
+}
