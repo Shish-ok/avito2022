@@ -3,11 +3,13 @@ package user_transaction
 import (
 	"avito2022/internal/app/models"
 	"context"
+	"fmt"
 	"log"
 )
 
 const (
-	UpBalance = "Пополнение баланса"
+	UpBalance     = "Пополнение баланса"
+	WithdrawMoney = "Снятие денег"
 )
 
 type Storage interface {
@@ -33,6 +35,29 @@ func (s *Service) UpBalanceTransaction(ctx context.Context, userID uint64, cost 
 
 func (s *Service) MakeServiceTransaction(ctx context.Context, userID uint64, serviceName string, cost float32) {
 	err := s.storage.MakeUserTransaction(ctx, models.NewUserTransaction(userID, serviceName, cost))
+	if err != nil {
+		log.Print(err)
+	}
+}
+
+func (s *Service) MakeTransferTransaction(ctx context.Context, senderID uint64, recipientName string, cost float32) {
+	description := fmt.Sprintf("Перевод пользователю %s", recipientName)
+	err := s.storage.MakeUserTransaction(ctx, models.NewUserTransaction(senderID, description, cost))
+	if err != nil {
+		log.Print(err)
+	}
+}
+
+func (s *Service) MakeReceiveTransaction(ctx context.Context, recipientID uint64, senderName string, cost float32) {
+	description := fmt.Sprintf("Перевод от пользователя %s", senderName)
+	err := s.storage.MakeUserTransaction(ctx, models.NewUserTransaction(recipientID, description, cost))
+	if err != nil {
+		log.Print(err)
+	}
+}
+
+func (s *Service) MakeWithdrawMoneyTransaction(ctx context.Context, userID uint64, cost float32) {
+	err := s.storage.MakeUserTransaction(ctx, models.NewUserTransaction(userID, WithdrawMoney, cost))
 	if err != nil {
 		log.Print(err)
 	}

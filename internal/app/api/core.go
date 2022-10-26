@@ -88,6 +88,8 @@ func (api *Api) registerRoutes() {
 	balance := base.Group("/balance")
 	balance.POST("/up_balance/", api.UpBalance)
 	balance.POST("/get_balance/", api.GetBalance)
+	balance.POST("/transfer_money", api.TransferMoney)
+	balance.POST("/withdraw_money", api.WithdrawMoney)
 
 	sales := base.Group("/sales")
 	sales.POST("/reserve_money", api.ReserveMoney)

@@ -2,7 +2,9 @@ package storage
 
 import (
 	"avito2022/internal/app/models"
+	balance_service "avito2022/internal/app/service/balance"
 	"context"
+	"database/sql"
 	"fmt"
 	sq "github.com/Masterminds/squirrel"
 )
@@ -60,10 +62,6 @@ func (p *PostgresStorage) RemoveMoney(ctx context.Context, userID uint64, cost f
 		Where(sq.Eq{UserID: userID}).
 		PlaceholderFormat(sq.Dollar).
 		ToSql()
-	//Update(BalanceTable).
-	//Suffix(fmt.Sprintf("SET %s = %s.%s - %f WHERE %s = %d", Balance, BalanceTable, Balance, cost, UserID, userID)).
-	//PlaceholderFormat(sq.Dollar).
-	//ToSql()
 
 	if err != nil {
 		return err
@@ -71,4 +69,63 @@ func (p *PostgresStorage) RemoveMoney(ctx context.Context, userID uint64, cost f
 
 	_, err = p.db.ExecContext(ctx, query, args...)
 	return err
+}
+
+func (p *PostgresStorage) TransferMoney(ctx context.Context, senderID uint64, recipientID uint64, cost float32) error {
+	tx, err := p.db.BeginTxx(ctx, &sql.TxOptions{
+		Isolation: sql.LevelSerializable,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	defer tx.Rollback()
+
+	balance, err := p.GetUserBalance(ctx, senderID)
+	if err != nil {
+		return err
+	}
+	if balance < cost {
+		return balance_service.ErrInsufficientBalance
+	}
+
+	err = p.RemoveMoney(ctx, senderID, cost)
+	if err != nil {
+		return err
+	}
+
+	err = p.UpsetUserBalance(ctx, models.UserBalance{UserID: recipientID, Balance: cost})
+	if err != nil {
+		return err
+	}
+
+	return tx.Commit()
+}
+
+func (p *PostgresStorage) WithdrawMoney(ctx context.Context, userID uint64, cost float32) error {
+	tx, err := p.db.BeginTxx(ctx, &sql.TxOptions{
+		Isolation: sql.LevelSerializable,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	defer tx.Rollback()
+
+	balance, err := p.GetUserBalance(ctx, userID)
+	if err != nil {
+		return err
+	}
+	if balance < cost {
+		return balance_service.ErrInsufficientBalance
+	}
+
+	err = p.RemoveMoney(ctx, userID, cost)
+	if err != nil {
+		return err
+	}
+
+	return tx.Commit()
 }

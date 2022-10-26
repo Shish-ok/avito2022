@@ -7,12 +7,15 @@ import (
 )
 
 var (
-	ErrInvalidBalance = errors.New("invalid balance")
+	ErrInvalidCost         = errors.New("invalid balance")
+	ErrInsufficientBalance = errors.New("insufficient balance")
 )
 
 type Storage interface {
 	UpsetUserBalance(context.Context, models.UserBalance) error
 	GetUserBalance(context.Context, uint64) (float32, error)
+	TransferMoney(context.Context, uint64, uint64, float32) error
+	WithdrawMoney(context.Context, uint64, float32) error
 }
 
 type Service struct {
@@ -27,11 +30,27 @@ func NewService(storage Storage) *Service {
 
 func (s *Service) UpsetUserBalance(ctx context.Context, userBalance models.UserBalance) error {
 	if userBalance.Balance < 0 {
-		return ErrInvalidBalance
+		return ErrInvalidCost
 	}
 	return s.storage.UpsetUserBalance(ctx, userBalance)
 }
 
 func (s *Service) GetUserBalance(ctx context.Context, userID uint64) (float32, error) {
 	return s.storage.GetUserBalance(ctx, userID)
+}
+
+func (s *Service) TransferMoney(ctx context.Context, senderID uint64, recipientID uint64, cost float32) error {
+	if cost < 0 {
+		return ErrInvalidCost
+	}
+
+	return s.storage.TransferMoney(ctx, senderID, recipientID, cost)
+}
+
+func (s *Service) WithdrawMoney(ctx context.Context, userID uint64, cost float32) error {
+	if cost < 0 {
+		return ErrInvalidCost
+	}
+
+	return s.storage.WithdrawMoney(ctx, userID, cost)
 }

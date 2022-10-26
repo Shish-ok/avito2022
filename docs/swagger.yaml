@@ -24,6 +24,13 @@ definitions:
       user_id:
         type: integer
     type: object
+  avito2022_internal_app_api.DebitingMoney:
+    properties:
+      debit_cost:
+        type: number
+      user_id:
+        type: integer
+    type: object
   avito2022_internal_app_api.Refund:
     properties:
       order_id:
@@ -41,6 +48,19 @@ definitions:
         type: string
       user_id:
         type: integer
+    type: object
+  avito2022_internal_app_api.Transfer:
+    properties:
+      cost:
+        type: number
+      recipient_id:
+        type: integer
+      recipient_name:
+        type: string
+      sender_id:
+        type: integer
+      sender_name:
+        type: string
     type: object
   avito2022_internal_app_api.UserID:
     properties:
@@ -72,6 +92,13 @@ definitions:
       user_id:
         type: integer
     type: object
+  internal_app_api.DebitingMoney:
+    properties:
+      debit_cost:
+        type: number
+      user_id:
+        type: integer
+    type: object
   internal_app_api.Refund:
     properties:
       order_id:
@@ -89,6 +116,19 @@ definitions:
         type: string
       user_id:
         type: integer
+    type: object
+  internal_app_api.Transfer:
+    properties:
+      cost:
+        type: number
+      recipient_id:
+        type: integer
+      recipient_name:
+        type: string
+      sender_id:
+        type: integer
+      sender_name:
+        type: string
     type: object
   internal_app_api.UserID:
     properties:
@@ -120,6 +160,26 @@ paths:
       summary: Получение баланса пользователя
       tags:
       - balance
+  /balance/transfer_money:
+    post:
+      consumes:
+      - application/json
+      description: Метод перевода денег от пользователя к пользователю
+      parameters:
+      - description: Входные параметры
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/avito2022_internal_app_api.Transfer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Перевод денег
+      tags:
+      - balance
   /balance/up_balance:
     post:
       consumes:
@@ -138,6 +198,26 @@ paths:
       summary: Пополнение или инициализация баланса
       tags:
       - balance
+  /balance/withdraw_money:
+    post:
+      consumes:
+      - application/json
+      description: Метод снимает указанное количество средств со счёта
+      parameters:
+      - description: Входные параметры
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/avito2022_internal_app_api.DebitingMoney'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Снятие денег со счёта
+      tags:
+      - balance
   /sales/reserve_money:
     post:
       consumes:
@@ -149,7 +229,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/internal_app_api.Reserve'
+          $ref: '#/definitions/avito2022_internal_app_api.Reserve'
       responses:
         "200":
           description: OK
@@ -168,7 +248,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/internal_app_api.Refund'
+          $ref: '#/definitions/avito2022_internal_app_api.Refund'
       responses:
         "200":
           description: OK
@@ -186,7 +266,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/internal_app_api.Confirmation'
+          $ref: '#/definitions/avito2022_internal_app_api.Confirmation'
       responses:
         "200":
           description: OK

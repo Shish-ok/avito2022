@@ -27,7 +27,10 @@ func (p *PostgresStorage) ReserveMoney(ctx context.Context, operation models.Hol
 	defer tx.Rollback()
 
 	balance, err := p.GetUserBalance(ctx, operation.UserID)
-	if balance < operation.Cost || err != nil {
+	if err != nil {
+		return err
+	}
+	if balance < operation.Cost {
 		return balance_holder.ErrInsufficientBalance
 	}
 
@@ -98,19 +101,8 @@ func (p *PostgresStorage) DelHolderOperationByOrderID(ctx context.Context, order
 }
 
 func (p *PostgresStorage) RevenueConfirmation(ctx context.Context, orderID uint64) error {
-	tx, err := p.db.Begin()
-
-	if err != nil {
-		return err
-	}
-
-	defer tx.Rollback()
-
-	if err := p.DelHolderOperationByOrderID(ctx, orderID); err != nil {
-		return err
-	}
-
-	return tx.Commit()
+	err := p.DelHolderOperationByOrderID(ctx, orderID)
+	return err
 }
 
 func (p *PostgresStorage) ReturnMoney(ctx context.Context, orderID uint64) error {

@@ -50,6 +50,37 @@ const docTemplate = `{
                 }
             }
         },
+        "/balance/transfer_money": {
+            "post": {
+                "description": "Метод перевода денег от пользователя к пользователю",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "balance"
+                ],
+                "summary": "Перевод денег",
+                "parameters": [
+                    {
+                        "description": "Входные параметры",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/avito2022_internal_app_api.Transfer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/balance/up_balance": {
             "post": {
                 "description": "Пополняет баланс пользователя или создаёт его при первом пополнении",
@@ -78,6 +109,37 @@ const docTemplate = `{
                 }
             }
         },
+        "/balance/withdraw_money": {
+            "post": {
+                "description": "Метод снимает указанное количество средств со счёта",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "balance"
+                ],
+                "summary": "Снятие денег со счёта",
+                "parameters": [
+                    {
+                        "description": "Входные параметры",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/avito2022_internal_app_api.DebitingMoney"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/sales/reserve_money": {
             "post": {
                 "description": "Резервирование средств с основного баланса на отдельном счете",
@@ -95,7 +157,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.Reserve"
+                            "$ref": "#/definitions/avito2022_internal_app_api.Reserve"
                         }
                     }
                 ],
@@ -123,7 +185,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.Refund"
+                            "$ref": "#/definitions/avito2022_internal_app_api.Refund"
                         }
                     }
                 ],
@@ -151,7 +213,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.Confirmation"
+                            "$ref": "#/definitions/avito2022_internal_app_api.Confirmation"
                         }
                     }
                 ],
@@ -203,6 +265,17 @@ const docTemplate = `{
                 }
             }
         },
+        "avito2022_internal_app_api.DebitingMoney": {
+            "type": "object",
+            "properties": {
+                "debit_cost": {
+                    "type": "number"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "avito2022_internal_app_api.Refund": {
             "type": "object",
             "properties": {
@@ -228,6 +301,26 @@ const docTemplate = `{
                 },
                 "user_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "avito2022_internal_app_api.Transfer": {
+            "type": "object",
+            "properties": {
+                "cost": {
+                    "type": "number"
+                },
+                "recipient_id": {
+                    "type": "integer"
+                },
+                "recipient_name": {
+                    "type": "string"
+                },
+                "sender_id": {
+                    "type": "integer"
+                },
+                "sender_name": {
+                    "type": "string"
                 }
             }
         },
@@ -278,6 +371,17 @@ const docTemplate = `{
                 }
             }
         },
+        "internal_app_api.DebitingMoney": {
+            "type": "object",
+            "properties": {
+                "debit_cost": {
+                    "type": "number"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "internal_app_api.Refund": {
             "type": "object",
             "properties": {
@@ -303,6 +407,26 @@ const docTemplate = `{
                 },
                 "user_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "internal_app_api.Transfer": {
+            "type": "object",
+            "properties": {
+                "cost": {
+                    "type": "number"
+                },
+                "recipient_id": {
+                    "type": "integer"
+                },
+                "recipient_name": {
+                    "type": "string"
+                },
+                "sender_id": {
+                    "type": "integer"
+                },
+                "sender_name": {
+                    "type": "string"
                 }
             }
         },
