@@ -3,9 +3,9 @@ package api
 import (
 	"avito2022/docs"
 	"avito2022/internal/app/config"
+	"avito2022/internal/app/service/accounting"
 	"avito2022/internal/app/service/balance"
 	"avito2022/internal/app/service/balance_holder"
-	"avito2022/internal/app/service/bugalter_accounting"
 	"avito2022/internal/app/service/user_transaction"
 	"context"
 	"github.com/gin-gonic/gin"
@@ -20,11 +20,11 @@ const (
 )
 
 type Api struct {
-	router             *gin.Engine
-	balance            *balance.Service
-	userTransaction    *user_transaction.Service
-	balanceHolder      *balance_holder.Service
-	bugalterAccounting *bugalter_accounting.Service
+	router          *gin.Engine
+	balance         *balance.Service
+	userTransaction *user_transaction.Service
+	balanceHolder   *balance_holder.Service
+	accounting      *accounting.Service
 }
 
 func (api *Api) Run() {
@@ -43,14 +43,14 @@ func NewApi(
 	balance *balance.Service,
 	userTransaction *user_transaction.Service,
 	balanceHolder *balance_holder.Service,
-	bugalterAccounting *bugalter_accounting.Service,
+	accounting *accounting.Service,
 ) *Api {
 	svc := &Api{
-		router:             router,
-		balance:            balance,
-		userTransaction:    userTransaction,
-		balanceHolder:      balanceHolder,
-		bugalterAccounting: bugalterAccounting,
+		router:          router,
+		balance:         balance,
+		userTransaction: userTransaction,
+		balanceHolder:   balanceHolder,
+		accounting:      accounting,
 	}
 	svc.registerRoutes()
 	return svc
@@ -95,4 +95,8 @@ func (api *Api) registerRoutes() {
 	sales.POST("/reserve_money", api.ReserveMoney)
 	sales.POST("/revenue_confirmation", api.RevenueConfirmation)
 	sales.POST("/return_money", api.ReturnMoney)
+
+	accounting := base.Group("/accounting")
+	accounting.POST("/report_link", api.GetReportLink)
+	accounting.GET("/report/:file_name", api.SendReport)
 }

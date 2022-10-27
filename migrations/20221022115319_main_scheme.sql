@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS service_history (
     order_id BIGINT NOT NULL UNIQUE,
     service_id BIGINT NOT NULL,
     user_id BIGINT NOT NULL,
-    operation_time TIMESTAMP,
+    operation_time DATE,
     service_name TEXT NOT NULL,
     cost NUMERIC(6, 2) NOT NULL
 );

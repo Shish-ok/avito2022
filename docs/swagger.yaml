@@ -36,6 +36,16 @@ definitions:
       order_id:
         type: integer
     type: object
+  avito2022_internal_app_api.ReportLink:
+    properties:
+      link:
+        type: string
+    type: object
+  avito2022_internal_app_api.ReportRequest:
+    properties:
+      date:
+        type: string
+    type: object
   avito2022_internal_app_api.Reserve:
     properties:
       cost:
@@ -104,6 +114,16 @@ definitions:
       order_id:
         type: integer
     type: object
+  internal_app_api.ReportLink:
+    properties:
+      link:
+        type: string
+    type: object
+  internal_app_api.ReportRequest:
+    properties:
+      date:
+        type: string
+    type: object
   internal_app_api.Reserve:
     properties:
       cost:
@@ -138,6 +158,28 @@ definitions:
 info:
   contact: {}
 paths:
+  /accounting/report_link:
+    post:
+      consumes:
+      - application/json
+      description: Метод по году и месяцу возвращает ссылку на скачивание отчёта
+      parameters:
+      - description: Входные параметры
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/avito2022_internal_app_api.ReportRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/avito2022_internal_app_api.ReportLink'
+      summary: Получение ссылки с отчётом за месяц
+      tags:
+      - accounting
   /balance/get_balance:
     post:
       consumes:
@@ -149,14 +191,14 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/avito2022_internal_app_api.UserID'
+          $ref: '#/definitions/internal_app_api.UserID'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/avito2022_internal_app_api.Balance'
+            $ref: '#/definitions/internal_app_api.Balance'
       summary: Получение баланса пользователя
       tags:
       - balance
@@ -171,7 +213,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/avito2022_internal_app_api.Transfer'
+          $ref: '#/definitions/internal_app_api.Transfer'
       produces:
       - application/json
       responses:
@@ -191,7 +233,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/avito2022_internal_app_api.BalanceReplenishment'
+          $ref: '#/definitions/internal_app_api.BalanceReplenishment'
       responses:
         "200":
           description: OK
@@ -209,7 +251,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/avito2022_internal_app_api.DebitingMoney'
+          $ref: '#/definitions/internal_app_api.DebitingMoney'
       produces:
       - application/json
       responses:
@@ -229,7 +271,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/avito2022_internal_app_api.Reserve'
+          $ref: '#/definitions/internal_app_api.Reserve'
       responses:
         "200":
           description: OK
@@ -248,7 +290,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/avito2022_internal_app_api.Refund'
+          $ref: '#/definitions/internal_app_api.Refund'
       responses:
         "200":
           description: OK
@@ -266,7 +308,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/avito2022_internal_app_api.Confirmation'
+          $ref: '#/definitions/internal_app_api.Confirmation'
       responses:
         "200":
           description: OK

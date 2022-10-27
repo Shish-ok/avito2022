@@ -78,6 +78,7 @@ func (api *Api) GetBalance(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, Balance{Balance: balance})
+
 }
 
 type Transfer struct {

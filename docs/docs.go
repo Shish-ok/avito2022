@@ -16,6 +16,40 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/accounting/report_link": {
+            "post": {
+                "description": "Метод по году и месяцу возвращает ссылку на скачивание отчёта",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounting"
+                ],
+                "summary": "Получение ссылки с отчётом за месяц",
+                "parameters": [
+                    {
+                        "description": "Входные параметры",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/avito2022_internal_app_api.ReportRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/avito2022_internal_app_api.ReportLink"
+                        }
+                    }
+                }
+            }
+        },
         "/balance/get_balance": {
             "post": {
                 "description": "Возвращает баланс пользователя по его id",
@@ -36,7 +70,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/avito2022_internal_app_api.UserID"
+                            "$ref": "#/definitions/internal_app_api.UserID"
                         }
                     }
                 ],
@@ -44,7 +78,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/avito2022_internal_app_api.Balance"
+                            "$ref": "#/definitions/internal_app_api.Balance"
                         }
                     }
                 }
@@ -70,7 +104,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/avito2022_internal_app_api.Transfer"
+                            "$ref": "#/definitions/internal_app_api.Transfer"
                         }
                     }
                 ],
@@ -98,7 +132,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/avito2022_internal_app_api.BalanceReplenishment"
+                            "$ref": "#/definitions/internal_app_api.BalanceReplenishment"
                         }
                     }
                 ],
@@ -129,7 +163,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/avito2022_internal_app_api.DebitingMoney"
+                            "$ref": "#/definitions/internal_app_api.DebitingMoney"
                         }
                     }
                 ],
@@ -157,7 +191,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/avito2022_internal_app_api.Reserve"
+                            "$ref": "#/definitions/internal_app_api.Reserve"
                         }
                     }
                 ],
@@ -185,7 +219,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/avito2022_internal_app_api.Refund"
+                            "$ref": "#/definitions/internal_app_api.Refund"
                         }
                     }
                 ],
@@ -213,7 +247,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/avito2022_internal_app_api.Confirmation"
+                            "$ref": "#/definitions/internal_app_api.Confirmation"
                         }
                     }
                 ],
@@ -281,6 +315,22 @@ const docTemplate = `{
             "properties": {
                 "order_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "avito2022_internal_app_api.ReportLink": {
+            "type": "object",
+            "properties": {
+                "link": {
+                    "type": "string"
+                }
+            }
+        },
+        "avito2022_internal_app_api.ReportRequest": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
                 }
             }
         },
@@ -387,6 +437,22 @@ const docTemplate = `{
             "properties": {
                 "order_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "internal_app_api.ReportLink": {
+            "type": "object",
+            "properties": {
+                "link": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_app_api.ReportRequest": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
                 }
             }
         },
