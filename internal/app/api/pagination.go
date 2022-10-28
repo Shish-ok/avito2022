@@ -25,7 +25,7 @@ type SortQuery struct {
 // @Description Сортирует транзакции пользователя по времени и с использованием пагинации
 // @Tags pagination
 // @Success 200
-// @Param increase query string  true  "сортировать по убыванию или возрастанию"
+// @Param increase query string  true  "сортировка по возрастанию — true, по убыванию — false"
 // @Param user_id query integer  true  "id пользователя"
 // @Param cursor query string false "курсор пагинации"
 // @Produce json
@@ -43,7 +43,8 @@ func (api *Api) SortByTime(ctx *gin.Context) {
 	}
 
 	page := Page{List: report}
-	prev, next, err := pagination.ChooseCursor(page.List, cursor, len(report), "time")
+	lenReport := len(report)
+	prev, next, err := pagination.ChooseCursor(page.List[0], page.List[lenReport-1], cursor, lenReport, "time")
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusInternalServerError)
 		return
@@ -65,7 +66,7 @@ func (api *Api) SortByTime(ctx *gin.Context) {
 // @Description Сортирует транзакции пользователя по стоимости и с использованием пагинации
 // @Tags pagination
 // @Success 200
-// @Param increase query string  true  "сортировать по убыванию или возрастанию"
+// @Param increase query string  true  "сортировка по возрастанию — true, по убыванию — false"
 // @Param user_id query integer  true  "id пользователя"
 // @Param cursor query string false "курсор пагинации"
 // @Produce json
@@ -83,7 +84,8 @@ func (api *Api) SortByCost(ctx *gin.Context) {
 	}
 
 	page := Page{List: report}
-	prev, next, err := pagination.ChooseCursor(page.List, cursor, len(report), "cost")
+	lenReport := len(report)
+	prev, next, err := pagination.ChooseCursor(page.List[0], page.List[lenReport-1], cursor, lenReport, "cost")
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusInternalServerError)
 		return

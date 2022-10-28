@@ -12,7 +12,7 @@ const (
 
 func (p *PostgresStorage) DownTimeFirstRequest(ctx context.Context, userID uint64) ([]pagination.Report, error) {
 	var reportList []pagination.Report
-	query := fmt.Sprintf(`SELECT transaction_id, operation_time, description, cost FROM transaction_history WHERE user_id = %d GROUP BY operation_time DESC LIMIT 5`, userID)
+	query := fmt.Sprintf(`SELECT transaction_id, operation_time, description, cost FROM transaction_history WHERE user_id = %d ORDER BY operation_time ASC Limit 5`, userID)
 
 	err := p.db.SelectContext(ctx, &reportList, query)
 	return reportList, err
@@ -20,7 +20,7 @@ func (p *PostgresStorage) DownTimeFirstRequest(ctx context.Context, userID uint6
 
 func (p *PostgresStorage) DownTimeNext(ctx context.Context, transactionID uint64, userID uint64, atTime string) ([]pagination.Report, error) {
 	var reportList []pagination.Report
-	query := fmt.Sprintf(`SELECT transaction_id, operation_time, description, cost FROM transaction_history WHERE (operation_id, transaction_id) < ('%s' :: timestamp, %d) AND user_id = %d GROUP BY operation_time DESC LIMIT 5`, atTime, transactionID, userID)
+	query := fmt.Sprintf(`SELECT transaction_id, operation_time, description, cost FROM transaction_history WHERE (operation_time, transaction_id) < ('%s' :: timestamp, %d) AND user_id = %d GROUP BY operation_time DESC LIMIT 5`, atTime, transactionID, userID)
 
 	err := p.db.SelectContext(ctx, &reportList, query)
 	return reportList, err
@@ -28,7 +28,7 @@ func (p *PostgresStorage) DownTimeNext(ctx context.Context, transactionID uint64
 
 func (p *PostgresStorage) DownTimePrev(ctx context.Context, transactionID uint64, userID uint64, atTime string) ([]pagination.Report, error) {
 	var reportList []pagination.Report
-	query := fmt.Sprintf(`SELECT transaction_id, operation_time, description, cost FROM transaction_history WHERE (operation_id, transaction_id) > ('%s' :: timestamp, %d) AND user_id = %d GROUP BY operation_time DESC LIMIT 5`, atTime, transactionID, userID)
+	query := fmt.Sprintf(`SELECT transaction_id, operation_time, description, cost FROM transaction_history WHERE (operation_time, transaction_id) > ('%s' :: timestamp, %d) AND user_id = %d GROUP BY operation_time DESC LIMIT 5`, atTime, transactionID, userID)
 
 	err := p.db.SelectContext(ctx, &reportList, query)
 	return reportList, err
@@ -36,7 +36,7 @@ func (p *PostgresStorage) DownTimePrev(ctx context.Context, transactionID uint64
 
 func (p *PostgresStorage) UpTimeFirstRequest(ctx context.Context, userID uint64) ([]pagination.Report, error) {
 	var reportList []pagination.Report
-	query := fmt.Sprintf(`SELECT transaction_id, operation_time, description, cost FROM transaction_history WHERE user_id = %d GROUP BY operation_time ASC LIMIT 5`, userID)
+	query := fmt.Sprintf(`SELECT transaction_id, operation_time, description, cost FROM transaction_history WHERE user_id = %d ORDER BY operation_time DESC Limit 5`, userID)
 
 	err := p.db.SelectContext(ctx, &reportList, query)
 	return reportList, err
@@ -44,7 +44,7 @@ func (p *PostgresStorage) UpTimeFirstRequest(ctx context.Context, userID uint64)
 
 func (p *PostgresStorage) UpTimeNext(ctx context.Context, transactionID uint64, userID uint64, atTime string) ([]pagination.Report, error) {
 	var reportList []pagination.Report
-	query := fmt.Sprintf(`SELECT transaction_id, operation_time, description, cost FROM transaction_history WHERE (operation_id, transaction_id) > ('%s' :: timestamp, %d) AND user_id = %d GROUP BY operation_time ASC LIMIT 5`, atTime, transactionID, userID)
+	query := fmt.Sprintf(`SELECT transaction_id, operation_time, description, cost FROM transaction_history WHERE (operation_time, transaction_id) > ('%s' :: timestamp, %d) and user_id = %d ORDER BY operation_time ASC LIMIT 5`, atTime, transactionID, userID)
 
 	err := p.db.SelectContext(ctx, &reportList, query)
 	return reportList, err
@@ -52,7 +52,7 @@ func (p *PostgresStorage) UpTimeNext(ctx context.Context, transactionID uint64, 
 
 func (p *PostgresStorage) UpTimePrev(ctx context.Context, transactionID uint64, userID uint64, atTime string) ([]pagination.Report, error) {
 	var reportList []pagination.Report
-	query := fmt.Sprintf(`SELECT transaction_id, operation_time, description, cost FROM transaction_history WHERE (operation_id, transaction_id) < ('%s' :: timestamp, %d) AND user_id = %d GROUP BY operation_time ASC LIMIT 5`, atTime, transactionID, userID)
+	query := fmt.Sprintf(`SELECT transaction_id, operation_time, description, cost FROM transaction_history WHERE (operation_time, transaction_id) < ('%s' :: timestamp, %d) AND user_id = %d GROUP BY operation_time ASC LIMIT 5`, atTime, transactionID, userID)
 
 	err := p.db.SelectContext(ctx, &reportList, query)
 	return reportList, err

@@ -304,7 +304,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/internal_app_api.Reserve'
+          $ref: '#/definitions/avito2022_internal_app_api.Reserve'
       responses:
         "200":
           description: OK
@@ -323,7 +323,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/internal_app_api.Refund'
+          $ref: '#/definitions/avito2022_internal_app_api.Refund'
       responses:
         "200":
           description: OK
@@ -341,7 +341,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/internal_app_api.Confirmation'
+          $ref: '#/definitions/avito2022_internal_app_api.Confirmation'
       responses:
         "200":
           description: OK
@@ -353,7 +353,7 @@ paths:
       description: Сортирует транзакции пользователя по стоимости и с использованием
         пагинации
       parameters:
-      - description: сортировать по убыванию или возрастанию
+      - description: сортировка по возрастанию — true, по убыванию — false
         in: query
         name: increase
         required: true
@@ -382,7 +382,7 @@ paths:
       description: Сортирует транзакции пользователя по времени и с использованием
         пагинации
       parameters:
-      - description: сортировать по убыванию или возрастанию
+      - description: сортировка по возрастанию — true, по убыванию — false
         in: query
         name: increase
         required: true

@@ -191,7 +191,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.Reserve"
+                            "$ref": "#/definitions/avito2022_internal_app_api.Reserve"
                         }
                     }
                 ],
@@ -219,7 +219,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.Refund"
+                            "$ref": "#/definitions/avito2022_internal_app_api.Refund"
                         }
                     }
                 ],
@@ -247,7 +247,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.Confirmation"
+                            "$ref": "#/definitions/avito2022_internal_app_api.Confirmation"
                         }
                     }
                 ],
@@ -271,7 +271,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "сортировать по убыванию или возрастанию",
+                        "description": "сортировка по возрастанию — true, по убыванию — false",
                         "name": "increase",
                         "in": "query",
                         "required": true
@@ -313,7 +313,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "сортировать по убыванию или возрастанию",
+                        "description": "сортировка по возрастанию — true, по убыванию — false",
                         "name": "increase",
                         "in": "query",
                         "required": true

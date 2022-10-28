@@ -65,16 +65,16 @@ func DecodeBase64Cursor(cursor interface{}, codeCursor string) error {
 }
 
 type Storage interface {
-	DownTimeFirstRequest(context.Context, uint64) ([]Report, error) //
+	DownTimeFirstRequest(context.Context, uint64) ([]Report, error)
 	DownTimeNext(context.Context, uint64, uint64, string) ([]Report, error)
 	DownTimePrev(context.Context, uint64, uint64, string) ([]Report, error)
-	UpTimeFirstRequest(context.Context, uint64) ([]Report, error) //
+	UpTimeFirstRequest(context.Context, uint64) ([]Report, error)
 	UpTimeNext(context.Context, uint64, uint64, string) ([]Report, error)
 	UpTimePrev(context.Context, uint64, uint64, string) ([]Report, error)
-	DownCostFirstRequest(context.Context, uint64) ([]Report, error) //
+	DownCostFirstRequest(context.Context, uint64) ([]Report, error)
 	DownCostNext(context.Context, uint64, uint64, float32) ([]Report, error)
 	DownCostPrev(context.Context, uint64, uint64, float32) ([]Report, error)
-	UpCostFirstRequest(context.Context, uint64) ([]Report, error) //
+	UpCostFirstRequest(context.Context, uint64) ([]Report, error)
 	UpCostNext(context.Context, uint64, uint64, float32) ([]Report, error)
 	UpCostPrev(context.Context, uint64, uint64, float32) ([]Report, error)
 }
@@ -101,16 +101,16 @@ func validateURLParameters(increase, userId string) (uint64, error) {
 	return uint64(userID), err
 }
 
-func ChooseCursor(list []Report, cursorStr string, reportLen int, objectSort string) (string, string, error) {
+func ChooseCursor(pReport, nReport Report, cursorStr string, reportLen int, objectSort string) (string, string, error) {
 	var prev string
 	var next string
 	if cursorStr == "" && reportLen == 5 {
-		hash, err := MakeCursorHash(objectSort, list[reportLen-1], true)
+		hash, err := MakeCursorHash(objectSort, nReport, true)
 		if err != nil {
 			return "", "", err
 		}
 		next = hash
-		return next, prev, err
+		return prev, next, err
 	}
 
 	if cursorStr == "" && reportLen < 5 {
@@ -121,7 +121,7 @@ func ChooseCursor(list []Report, cursorStr string, reportLen int, objectSort str
 	_ = DecodeBase64Cursor(&cursor, cursorStr)
 
 	if cursor.Forward && reportLen < 5 {
-		hash, err := MakeCursorHash(objectSort, list[0], false)
+		hash, err := MakeCursorHash(objectSort, pReport, false)
 		if err != nil {
 			return prev, next, err
 		}
@@ -130,27 +130,27 @@ func ChooseCursor(list []Report, cursorStr string, reportLen int, objectSort str
 	}
 
 	if !cursor.Forward && reportLen < 5 {
-		hash, err := MakeCursorHash(objectSort, list[reportLen-1], true)
+		hash, err := MakeCursorHash(objectSort, nReport, true)
 		if err != nil {
-			return prev, hash, err
+			return prev, next, err
 		}
 		next = hash
 		return prev, next, err
 	}
 
-	hash, err := MakeCursorHash(objectSort, list[reportLen-1], true)
+	hash, err := MakeCursorHash(objectSort, nReport, true)
 	if err != nil {
-		return prev, hash, err
+		return prev, next, err
 	}
 	next = hash
 
-	hash, err = MakeCursorHash(objectSort, list[0], false)
+	hash, err = MakeCursorHash(objectSort, pReport, false)
 	if err != nil {
 		return prev, next, err
 	}
 	prev = hash
 
-	return prev, hash, nil
+	return prev, next, nil
 }
 
 func (s *Service) PaginationCost(ctx context.Context, increase, userId, cursorStr string) ([]Report, error) {
