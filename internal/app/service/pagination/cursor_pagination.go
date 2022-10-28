@@ -1,7 +1,6 @@
 package pagination
 
 import (
-	"avito2022/internal/app/storage"
 	"bytes"
 	"context"
 	"encoding/base64"
@@ -17,8 +16,6 @@ const (
 	ObjectTime = "time"
 	ObjectCost = "cost"
 )
-
-var validObjectsToSort = []string{ObjectTime, ObjectCost}
 
 var (
 	ErrInvalidParam = errors.New("invalid params")
@@ -107,35 +104,38 @@ func validateURLParameters(increase, userId string) (uint64, error) {
 func ChooseCursor(list []Report, cursorStr string, reportLen int, objectSort string) (string, string, error) {
 	var prev string
 	var next string
-	if cursorStr == "" && reportLen == storage.PageLimit {
+	if cursorStr == "" && reportLen == 5 {
 		hash, err := MakeCursorHash(objectSort, list[reportLen-1], true)
 		if err != nil {
 			return "", "", err
 		}
 		next = hash
+		return next, prev, err
 	}
 
-	if cursorStr == "" && reportLen < storage.PageLimit {
+	if cursorStr == "" && reportLen < 5 {
 		return "", "", nil
 	}
 
 	var cursor Cursor
 	_ = DecodeBase64Cursor(&cursor, cursorStr)
 
-	if cursor.Forward && reportLen < storage.PageLimit {
+	if cursor.Forward && reportLen < 5 {
 		hash, err := MakeCursorHash(objectSort, list[0], false)
 		if err != nil {
 			return prev, next, err
 		}
 		prev = hash
+		return prev, next, err
 	}
 
-	if !cursor.Forward && reportLen < storage.PageLimit {
+	if !cursor.Forward && reportLen < 5 {
 		hash, err := MakeCursorHash(objectSort, list[reportLen-1], true)
 		if err != nil {
 			return prev, hash, err
 		}
 		next = hash
+		return prev, next, err
 	}
 
 	hash, err := MakeCursorHash(objectSort, list[reportLen-1], true)
