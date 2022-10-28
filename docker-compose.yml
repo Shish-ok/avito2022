@@ -13,7 +13,7 @@ services:
     ports:
       - "5435:5432"
   api:
-    image: api-golang:latest
+    image: go-api
     restart: always
     volumes:
       - type: bind

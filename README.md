@@ -17,11 +17,14 @@
 ## Запустим локально при помощи Docker
 
 ```
+docker build . -t go-api
+docker-compose build
 docker-compose up
 ```
 
 ## Описание запросов
-Для выполнения запросов использовал swagger
+Для выполнения запросов использовал swagger:
+http://localhost:8080/swagger/index.html#/sales
 
 ### /balance
 1. get_balance
