@@ -33,7 +33,7 @@ func (api *Api) GetReportLink(ctx *gin.Context) {
 		return
 	}
 
-	link, err := api.bugalterAccounting.MakeReportLink(ctx, request.Date)
+	link, err := api.accounting.MakeReportLink(ctx, request.Date)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusInternalServerError)
 		return

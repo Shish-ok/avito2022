@@ -88,7 +88,7 @@ func (api *Api) RevenueConfirmation(ctx *gin.Context) {
 	}
 
 	api.userTransaction.MakeServiceTransaction(ctx, confirmation.UserID, confirmation.ServiceName, confirmation.Cost)
-	api.bugalterAccounting.AddServiceTransaction(ctx, models.HolderOperation{
+	api.accounting.AddServiceTransaction(ctx, models.HolderOperation{
 		OrderID:     confirmation.OrderID,
 		ServiceID:   confirmation.ServiceID,
 		UserID:      confirmation.UserID,

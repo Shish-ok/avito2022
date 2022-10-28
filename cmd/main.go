@@ -6,6 +6,7 @@ import (
 	"avito2022/internal/app/service/accounting"
 	"avito2022/internal/app/service/balance"
 	"avito2022/internal/app/service/balance_holder"
+	"avito2022/internal/app/service/pagination"
 	"avito2022/internal/app/service/user_transaction"
 	"avito2022/internal/app/storage"
 	"context"
@@ -29,6 +30,10 @@ func serviceHistoryStorage(storage *storage.PostgresStorage) accounting.Storage 
 	return storage
 }
 
+func paginationStorage(storage *storage.PostgresStorage) pagination.Storage {
+	return storage
+}
+
 // main godoc
 func main() {
 	fx.New(
@@ -46,6 +51,8 @@ func main() {
 			balance_holder.NewService,
 			serviceHistoryStorage,
 			accounting.NewService,
+			paginationStorage,
+			pagination.NewService,
 		),
 		fx.Invoke(api.StartHook),
 	).Run()

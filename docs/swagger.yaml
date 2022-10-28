@@ -31,6 +31,17 @@ definitions:
       user_id:
         type: integer
     type: object
+  avito2022_internal_app_api.Page:
+    properties:
+      list:
+        items:
+          $ref: '#/definitions/pagination.Report'
+        type: array
+      next_cursor:
+        type: string
+      prev_cursor:
+        type: string
+    type: object
   avito2022_internal_app_api.Refund:
     properties:
       order_id:
@@ -109,6 +120,17 @@ definitions:
       user_id:
         type: integer
     type: object
+  internal_app_api.Page:
+    properties:
+      list:
+        items:
+          $ref: '#/definitions/pagination.Report'
+        type: array
+      next_cursor:
+        type: string
+      prev_cursor:
+        type: string
+    type: object
   internal_app_api.Refund:
     properties:
       order_id:
@@ -153,6 +175,17 @@ definitions:
   internal_app_api.UserID:
     properties:
       id:
+        type: integer
+    type: object
+  pagination.Report:
+    properties:
+      cost:
+        type: number
+      description:
+        type: string
+      operation_time:
+        type: string
+      transaction_id:
         type: integer
     type: object
 info:
@@ -315,4 +348,62 @@ paths:
       summary: Метод признания выручки
       tags:
       - sales
+  /user_transaction/cost_sort:
+    get:
+      description: Сортирует транзакции пользователя по стоимости и с использованием
+        пагинации
+      parameters:
+      - description: сортировать по убыванию или возрастанию
+        in: query
+        name: increase
+        required: true
+        type: string
+      - description: id пользователя
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: курсор пагинации
+        in: query
+        name: cursor
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_app_api.Page'
+      summary: Сортировка транзакций по стоимости c пагинацией
+      tags:
+      - pagination
+  /user_transaction/time_sort:
+    get:
+      description: Сортирует транзакции пользователя по времени и с использованием
+        пагинации
+      parameters:
+      - description: сортировать по убыванию или возрастанию
+        in: query
+        name: increase
+        required: true
+        type: string
+      - description: id пользователя
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: курсор пагинации
+        in: query
+        name: cursor
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_app_api.Page'
+      summary: Сортировка транзакций по времени с пагинацией
+      tags:
+      - pagination
 swagger: "2.0"

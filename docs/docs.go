@@ -257,6 +257,90 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/user_transaction/cost_sort": {
+            "get": {
+                "description": "Сортирует транзакции пользователя по стоимости и с использованием пагинации",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pagination"
+                ],
+                "summary": "Сортировка транзакций по стоимости c пагинацией",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "сортировать по убыванию или возрастанию",
+                        "name": "increase",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "id пользователя",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "курсор пагинации",
+                        "name": "cursor",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_app_api.Page"
+                        }
+                    }
+                }
+            }
+        },
+        "/user_transaction/time_sort": {
+            "get": {
+                "description": "Сортирует транзакции пользователя по времени и с использованием пагинации",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pagination"
+                ],
+                "summary": "Сортировка транзакций по времени с пагинацией",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "сортировать по убыванию или возрастанию",
+                        "name": "increase",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "id пользователя",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "курсор пагинации",
+                        "name": "cursor",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_app_api.Page"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -307,6 +391,23 @@ const docTemplate = `{
                 },
                 "user_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "avito2022_internal_app_api.Page": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/pagination.Report"
+                    }
+                },
+                "next_cursor": {
+                    "type": "string"
+                },
+                "prev_cursor": {
+                    "type": "string"
                 }
             }
         },
@@ -432,6 +533,23 @@ const docTemplate = `{
                 }
             }
         },
+        "internal_app_api.Page": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/pagination.Report"
+                    }
+                },
+                "next_cursor": {
+                    "type": "string"
+                },
+                "prev_cursor": {
+                    "type": "string"
+                }
+            }
+        },
         "internal_app_api.Refund": {
             "type": "object",
             "properties": {
@@ -500,6 +618,23 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "pagination.Report": {
+            "type": "object",
+            "properties": {
+                "cost": {
+                    "type": "number"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "operation_time": {
+                    "type": "string"
+                },
+                "transaction_id": {
                     "type": "integer"
                 }
             }

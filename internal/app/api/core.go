@@ -6,6 +6,7 @@ import (
 	"avito2022/internal/app/service/accounting"
 	"avito2022/internal/app/service/balance"
 	"avito2022/internal/app/service/balance_holder"
+	"avito2022/internal/app/service/pagination"
 	"avito2022/internal/app/service/user_transaction"
 	"context"
 	"github.com/gin-gonic/gin"
@@ -20,11 +21,12 @@ const (
 )
 
 type Api struct {
-	router          *gin.Engine
-	balance         *balance.Service
-	userTransaction *user_transaction.Service
-	balanceHolder   *balance_holder.Service
-	accounting      *accounting.Service
+	router           *gin.Engine
+	balance          *balance.Service
+	userTransaction  *user_transaction.Service
+	balanceHolder    *balance_holder.Service
+	accounting       *accounting.Service
+	cursorPagination *pagination.Service
 }
 
 func (api *Api) Run() {
@@ -44,13 +46,15 @@ func NewApi(
 	userTransaction *user_transaction.Service,
 	balanceHolder *balance_holder.Service,
 	accounting *accounting.Service,
+	cursorPagination *pagination.Service,
 ) *Api {
 	svc := &Api{
-		router:          router,
-		balance:         balance,
-		userTransaction: userTransaction,
-		balanceHolder:   balanceHolder,
-		accounting:      accounting,
+		router:           router,
+		balance:          balance,
+		userTransaction:  userTransaction,
+		balanceHolder:    balanceHolder,
+		accounting:       accounting,
+		cursorPagination: cursorPagination,
 	}
 	svc.registerRoutes()
 	return svc
@@ -99,4 +103,9 @@ func (api *Api) registerRoutes() {
 	accounting := base.Group("/accounting")
 	accounting.POST("/report_link", api.GetReportLink)
 	accounting.GET("/report/:file_name", api.SendReport)
+
+	pagination := base.Group("/user_transaction")
+	pagination.GET("/time_sort", api.SortByTime)
+	pagination.GET("/cost_sort", api.SortByCost)
+
 }
